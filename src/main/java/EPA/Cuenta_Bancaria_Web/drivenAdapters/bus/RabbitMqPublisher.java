@@ -17,9 +17,15 @@ public class RabbitMqPublisher {
     @Autowired
     private Gson gson;
 
-    public void publishMessage(Object object){
+    public void publishMessage(Object object) {
         sender
                 .send(Mono.just(new OutboundMessage(RabbitConfig.EXCHANGE_NAME,
                         RabbitConfig.ROUTING_KEY_NAME, gson.toJson(object).getBytes()))).subscribe();
+    }
+
+    public void publishError(Object object) {
+        sender
+                .send(Mono.just(new OutboundMessage(RabbitConfig.EXCHANGE_NAME,
+                        RabbitConfig.ROUTING_ERROR_KEY_NAME, gson.toJson(object).getBytes()))).subscribe();
     }
 }

@@ -26,8 +26,10 @@ public class RabbitConfig {
 
     public static final String QUEUE_NAME = "transactions-queue";
     public static final String QUEUE_NAME_2 = "transactions-queue-2";
+    public static final String QUEUE_ERROR_CREATING_ACCOUNT = "creating-account-error-queue";
     public static final String EXCHANGE_NAME = "transactions-exchange";
     public static final String ROUTING_KEY_NAME = "transactions.routing.key";
+    public static final String ROUTING_ERROR_KEY_NAME = "transactions.error.routing.key";
     public static final String URI_NAME = "amqp://guest:guest@localhost:5672";
 
 
@@ -39,11 +41,14 @@ public class RabbitConfig {
         var exchange = new TopicExchange(EXCHANGE_NAME);
         var queue = new Queue(QUEUE_NAME, true, false, false);
         var queue2 = new Queue(QUEUE_NAME_2, true, false, false);
+        var errorCreatingAccountQueue = new Queue(QUEUE_ERROR_CREATING_ACCOUNT, true, false, false);
         amqpAdmin.declareExchange(exchange);
         amqpAdmin.declareQueue(queue);
         amqpAdmin.declareQueue(queue2);
+        amqpAdmin.declareQueue(errorCreatingAccountQueue);
         amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_NAME));
         amqpAdmin.declareBinding(BindingBuilder.bind(queue2).to(exchange).with(ROUTING_KEY_NAME));
+        amqpAdmin.declareBinding(BindingBuilder.bind(errorCreatingAccountQueue).to(exchange).with(ROUTING_ERROR_KEY_NAME));
 
         return amqpAdmin;
     }
@@ -54,6 +59,7 @@ public class RabbitConfig {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.useNio();
         connectionFactory.setUri(URI_NAME);
+        connectionFactory.setVirtualHost("/");
         return connectionFactory;
     }
 
