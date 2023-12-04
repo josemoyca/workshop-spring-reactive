@@ -30,7 +30,7 @@ public class RabbitConfig {
     public static final String EXCHANGE_NAME = "transactions-exchange";
     public static final String ROUTING_KEY_NAME = "transactions.routing.key";
     public static final String ROUTING_ERROR_KEY_NAME = "transactions.error.routing.key";
-    public static final String URI_NAME = "amqp://guest:guest@localhost:5672";
+    public static final String URI_NAME = "amqp://guest:guest@myrabbitmq:5672";
 
 
     @Bean
